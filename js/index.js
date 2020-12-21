@@ -1,30 +1,20 @@
 function draw() {
-  var canvas = this.document.getElementById('canvas-element');
-  var button = this.document.getElementById('clear-interval');
-  var ctx = canvas.getContext('2d');
-  // arc(x, y, radius, startAngle, endAngle, anticlockwise)
-  // clearRect(x, y, width, height)
-  var endAngle = Math.PI / 30;
-  var increment = Math.PI / 30;
-  var stopAngle = 2 * Math.PI;
-  var intervalId = this.setInterval(tick, 1000);
-  button.addEventListener('click', function() {
-    clearTickInterval();
-    return undefined;
-  });
+  // declare functions at top, is this good practice?
   function tick() {
-    if(endAngle > stopAngle) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      endAngle = Math.PI / 30;
-      return undefined;
-    }
+    this.console.log(seconds);
     // clear the canvas so that the subsequent calls to tick()
     // don't redraw the same lines over and over again
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
-    ctx.arc(250, 250, 150, 0, endAngle, false);
+    ctx.arc(250, 250, 150, startAngle, endAngle, false);
     ctx.stroke();
     endAngle += increment;
+    seconds += 1;
+    if (endAngle > stopAngle) {
+      seconds = 1;
+      endAngle = pi / 30;
+      return undefined;
+    }
     return undefined;
   }
   function clearTickInterval() {
@@ -32,6 +22,21 @@ function draw() {
     this.console.log('clearInterval fired');
     return undefined;
   }
+  const canvas = this.document.getElementById('canvas-element');
+  const button = this.document.getElementById('clear-interval');
+  const ctx = canvas.getContext('2d');
+  // arc(x, y, radius, startAngle, endAngle, anticlockwise)
+  // clearRect(x, y, width, height)
+  let seconds = 0;
+  const pi = Math.PI;
+  const startAngle = 0;
+  let endAngle = 0;
+  const increment = pi / 30;
+  const stopAngle = 2 * pi;
+  const intervalId = this.setInterval(tick, 1000);
+  button.addEventListener('click', function() {
+    clearTickInterval();
+  });
   return undefined;
 }
 
