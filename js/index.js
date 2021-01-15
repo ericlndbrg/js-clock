@@ -1,38 +1,33 @@
-function draw() {
-  var canvas = this.document.getElementById('canvas-element');
-  var button = this.document.getElementById('clear-interval');
-  var ctx = canvas.getContext('2d');
-  // arc(x, y, radius, startAngle, endAngle, anticlockwise)
-  // clearRect(x, y, width, height)
-  var endAngle = Math.PI / 30;
-  var increment = Math.PI / 30;
-  var stopAngle = 2 * Math.PI;
-  var intervalId = this.setInterval(tick, 1000);
-  button.addEventListener('click', function() {
-    clearTickInterval();
-    return undefined;
-  });
+(function() {
+  const time = this.document.getElementById('time');
+  const canvas = this.document.getElementById('canvas');
+  const button = this.document.getElementById('clear-interval');
+  const pi = Math.PI;
+  const ctx = canvas.getContext('2d');
+  // the following 3 lines rotate the circles around their center point (source: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate)
+  ctx.translate(250, 250); // move matrix's origin to shape's center
+  ctx.rotate((3 * pi) / 2); // rotate matrix clockwise by desired amount
+  ctx.translate(-250, -250); // move matrix's origin back to its starting point
+  const hourHandIncrement = pi / 12;
+  const secMinHandIncrement = pi / 30;
+  this.setInterval(tick, 1000);
   function tick() {
-    if(endAngle > stopAngle) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      endAngle = Math.PI / 30;
+    const date = new Date();
+    time.textContent = date.toLocaleTimeString([], { hour12: false });
+    const hourAngle = date.getHours() * hourHandIncrement;
+    const minuteAngle = date.getMinutes() * secMinHandIncrement;
+    const secondAngle = date.getSeconds() * secMinHandIncrement;
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // prevents redrawing
+    drawArc(198, hourAngle); // hour hand
+    drawArc(132, minuteAngle); // minute hand
+    drawArc(66, secondAngle); // second hand
+    function drawArc(radius, endAngle) {
+      ctx.beginPath();
+      ctx.arc(250, 250, radius, 0, endAngle, false);
+      ctx.stroke();
       return undefined;
     }
-    // clear the canvas so that the subsequent calls to tick()
-    // don't redraw the same lines over and over again
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.arc(250, 250, 150, 0, endAngle, false);
-    ctx.stroke();
-    endAngle += increment;
-    return undefined;
-  }
-  function clearTickInterval() {
-    this.clearInterval(intervalId);
-    this.console.log('clearInterval fired');
     return undefined;
   }
   return undefined;
-}
-
-draw();
+})();
