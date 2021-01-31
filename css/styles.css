@@ -1,8 +1,7 @@
-canvas {
-  border: 1px solid black;
+body {
+  margin: 0;
+  padding: 0;
 }
 #time {
   position: absolute;
-  top: 250px;
-  left: 230px;
 }
